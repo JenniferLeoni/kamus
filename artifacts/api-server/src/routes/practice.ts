@@ -123,7 +123,7 @@ router.post("/sentence-check", async (req, res) => {
   const { word, reading, meaning, sentence } = parsed.data;
 
   try {
-    const { result, provider } = await checkSentenceWithFallback(word, reading, meaning, sentence);
+    const { result, provider } = await checkSentenceWithFallback(word, reading ?? "", meaning ?? "", sentence);
     res.json({ ...result, _provider: provider });
   } catch (err: any) {
     logger.error({ err }, "All AI providers failed");
