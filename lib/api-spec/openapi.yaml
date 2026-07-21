@@ -3,13 +3,19 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Japanese Vocabulary and Kanji Quiz API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: vocab
+    description: Vocabulary management
+  - name: kanji
+    description: Kanji management
+  - name: practice
+    description: Practice modes
 paths:
   /healthz:
     get:
@@ -24,6 +30,304 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # ─── VOCAB ───────────────────────────────────────────────────────────────────
+  /vocab:
+    get:
+      operationId: listVocab
+      tags: [vocab]
+      summary: List vocabulary
+      parameters:
+        - name: section
+          in: query
+          schema: { type: integer }
+        - name: chapter
+          in: query
+          schema: { type: integer }
+        - name: level
+          in: query
+          schema: { type: string, enum: [N5, N4, N3, N2, N1] }
+        - name: type
+          in: query
+          schema: { type: string }
+        - name: search
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: List of vocabulary
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vocab"
+    post:
+      operationId: createVocab
+      tags: [vocab]
+      summary: Create vocabulary entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VocabInput"
+      responses:
+        "201":
+          description: Created vocabulary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vocab"
+
+  /vocab/{id}:
+    get:
+      operationId: getVocab
+      tags: [vocab]
+      summary: Get a vocabulary entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Vocabulary entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vocab"
+        "404":
+          description: Not found
+    put:
+      operationId: updateVocab
+      tags: [vocab]
+      summary: Update a vocabulary entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VocabInput"
+      responses:
+        "200":
+          description: Updated vocabulary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vocab"
+    delete:
+      operationId: deleteVocab
+      tags: [vocab]
+      summary: Delete a vocabulary entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── KANJI ───────────────────────────────────────────────────────────────────
+  /kanji:
+    get:
+      operationId: listKanji
+      tags: [kanji]
+      summary: List kanji
+      parameters:
+        - name: section
+          in: query
+          schema: { type: integer }
+        - name: chapter
+          in: query
+          schema: { type: integer }
+        - name: level
+          in: query
+          schema: { type: string, enum: [N5, N4, N3, N2, N1] }
+        - name: search
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: List of kanji
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Kanji"
+    post:
+      operationId: createKanji
+      tags: [kanji]
+      summary: Create kanji entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KanjiInput"
+      responses:
+        "201":
+          description: Created kanji
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Kanji"
+
+  /kanji/{id}:
+    get:
+      operationId: getKanji
+      tags: [kanji]
+      summary: Get a kanji entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Kanji entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Kanji"
+        "404":
+          description: Not found
+    put:
+      operationId: updateKanji
+      tags: [kanji]
+      summary: Update a kanji entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KanjiInput"
+      responses:
+        "200":
+          description: Updated kanji
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Kanji"
+    delete:
+      operationId: deleteKanji
+      tags: [kanji]
+      summary: Delete a kanji entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "204":
+          description: Deleted
+
+  # ─── PRACTICE ────────────────────────────────────────────────────────────────
+  /practice/multiple-choice:
+    get:
+      operationId: getMultipleChoiceQuestions
+      tags: [practice]
+      summary: Get multiple choice questions
+      parameters:
+        - name: quizType
+          in: query
+          required: true
+          schema: { type: string, enum: [vocab, kanji] }
+        - name: section
+          in: query
+          schema: { type: integer }
+        - name: chapter
+          in: query
+          schema: { type: integer }
+        - name: level
+          in: query
+          schema: { type: string, enum: [N5, N4, N3, N2, N1] }
+        - name: count
+          in: query
+          schema: { type: integer, default: 10 }
+      responses:
+        "200":
+          description: Multiple choice questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MultipleChoiceQuestion"
+
+  /practice/sentence-check:
+    post:
+      operationId: checkSentence
+      tags: [practice]
+      summary: Check a user-created sentence using AI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SentenceCheckInput"
+      responses:
+        "200":
+          description: AI feedback on the sentence
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SentenceCheckResult"
+
+  /practice/sentence-words:
+    get:
+      operationId: getSentenceWords
+      tags: [practice]
+      summary: Get words for sentence creation practice
+      parameters:
+        - name: section
+          in: query
+          schema: { type: integer }
+        - name: chapter
+          in: query
+          schema: { type: integer }
+        - name: level
+          in: query
+          schema: { type: string, enum: [N5, N4, N3, N2, N1] }
+        - name: count
+          in: query
+          schema: { type: integer, default: 5 }
+      responses:
+        "200":
+          description: Words for sentence practice
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vocab"
+
+  # ─── STATS ───────────────────────────────────────────────────────────────────
+  /stats:
+    get:
+      operationId: getStats
+      tags: [vocab]
+      summary: Get library stats (counts by level, section)
+      responses:
+        "200":
+          description: Library statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LibraryStats"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +338,260 @@ components:
       required:
         - status
 
+    ExampleSentence:
+      type: object
+      required: [japanese, romaji, english]
+      properties:
+        japanese:
+          type: string
+        romaji:
+          type: string
+        english:
+          type: string
+
+    GrammarExample:
+      type: object
+      required: [grammar, sentence, romaji, english]
+      properties:
+        grammar:
+          type: string
+          description: Grammar pattern (e.g. -tai, -nai, -te kudasai)
+        sentence:
+          type: string
+        romaji:
+          type: string
+        english:
+          type: string
+
+    KanjiExample:
+      type: object
+      required: [word, reading, meaning]
+      properties:
+        word:
+          type: string
+        reading:
+          type: string
+        meaning:
+          type: string
+
+    Vocab:
+      type: object
+      required: [id, word, reading, meaning, type, level, section, chapter]
+      properties:
+        id:
+          type: string
+        word:
+          type: string
+          description: The word in kanji/kana
+        reading:
+          type: string
+          description: Hiragana reading
+        romaji:
+          type: string
+          description: Romanized reading
+        meaning:
+          type: string
+          description: English meaning(s)
+        type:
+          type: string
+          description: Word type (noun, verb, adjective, adverb, etc.)
+        level:
+          type: string
+          enum: [N5, N4, N3, N2, N1]
+        section:
+          type: integer
+        chapter:
+          type: integer
+        example_sentences:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExampleSentence"
+        grammar_examples:
+          type: array
+          items:
+            $ref: "#/components/schemas/GrammarExample"
+          description: Grammar pattern examples (mainly for verbs)
+
+    VocabInput:
+      type: object
+      required: [word, reading, meaning, type, level, section, chapter]
+      properties:
+        word:
+          type: string
+        reading:
+          type: string
+        romaji:
+          type: string
+        meaning:
+          type: string
+        type:
+          type: string
+        level:
+          type: string
+          enum: [N5, N4, N3, N2, N1]
+        section:
+          type: integer
+        chapter:
+          type: integer
+        example_sentences:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExampleSentence"
+        grammar_examples:
+          type: array
+          items:
+            $ref: "#/components/schemas/GrammarExample"
+
+    Kanji:
+      type: object
+      required: [id, character, meanings, level, section, chapter]
+      properties:
+        id:
+          type: string
+        character:
+          type: string
+        on_readings:
+          type: array
+          items:
+            type: string
+        kun_readings:
+          type: array
+          items:
+            type: string
+        meanings:
+          type: array
+          items:
+            type: string
+        strokes:
+          type: ["integer", "null"]
+        level:
+          type: string
+          enum: [N5, N4, N3, N2, N1]
+        section:
+          type: integer
+        chapter:
+          type: integer
+        examples:
+          type: array
+          items:
+            $ref: "#/components/schemas/KanjiExample"
+
+    KanjiInput:
+      type: object
+      required: [character, meanings, level, section, chapter]
+      properties:
+        character:
+          type: string
+        on_readings:
+          type: array
+          items:
+            type: string
+        kun_readings:
+          type: array
+          items:
+            type: string
+        meanings:
+          type: array
+          items:
+            type: string
+        strokes:
+          type: ["integer", "null"]
+        level:
+          type: string
+          enum: [N5, N4, N3, N2, N1]
+        section:
+          type: integer
+        chapter:
+          type: integer
+        examples:
+          type: array
+          items:
+            $ref: "#/components/schemas/KanjiExample"
+
+    MultipleChoiceQuestion:
+      type: object
+      required: [id, questionType, prompt, options, correctIndex, vocab, kanji]
+      properties:
+        id:
+          type: string
+        questionType:
+          type: string
+          enum: [vocab, kanji]
+        prompt:
+          type: string
+          description: The word or kanji shown to the user
+        promptReading:
+          type: ["string", "null"]
+        options:
+          type: array
+          items:
+            type: string
+        correctIndex:
+          type: integer
+        vocab:
+          $ref: "#/components/schemas/Vocab"
+          description: Full vocab data (null for kanji questions)
+        kanji:
+          $ref: "#/components/schemas/Kanji"
+          description: Full kanji data (null for vocab questions)
+
+    SentenceCheckInput:
+      type: object
+      required: [wordId, wordType, word, sentence]
+      properties:
+        wordId:
+          type: string
+        wordType:
+          type: string
+          enum: [vocab, kanji]
+        word:
+          type: string
+        reading:
+          type: string
+        meaning:
+          type: string
+        sentence:
+          type: string
+
+    SentenceCheckResult:
+      type: object
+      required: [isCorrect, feedback, score]
+      properties:
+        isCorrect:
+          type: boolean
+        score:
+          type: integer
+          description: 0-100
+        feedback:
+          type: string
+        corrections:
+          type: ["string", "null"]
+        alternativeExamples:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExampleSentence"
+
+    LibraryStats:
+      type: object
+      required: [totalVocab, totalKanji, vocabByLevel, kanjiByLevel, vocabBySection, kanjiBySection]
+      properties:
+        totalVocab:
+          type: integer
+        totalKanji:
+          type: integer
+        vocabByLevel:
+          type: object
+          additionalProperties:
+            type: integer
+        kanjiByLevel:
+          type: object
+          additionalProperties:
+            type: integer
+        vocabBySection:
+          type: object
+          additionalProperties:
+            type: integer
+        kanjiBySection:
+          type: object
+          additionalProperties:
+            type: integer
