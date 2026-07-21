@@ -5,6 +5,11 @@
 [build.environment]
   # Vite base path for a Netlify root deployment
   BASE_PATH = "/"
+  # Required: set this in Netlify → Site settings → Environment variables
+  # to the full URL of your deployed API server, e.g.:
+  #   VITE_API_BASE_URL = "https://your-api.replit.app/api"
+  # VITE_API_BASE_URL is intentionally left unset here so it can be
+  # configured per-site without being committed to the repo.
 
 # SPA fallback — all routes serve index.html
 [[redirects]]
