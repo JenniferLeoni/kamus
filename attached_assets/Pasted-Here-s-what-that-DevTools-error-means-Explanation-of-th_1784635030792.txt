@@ -1,0 +1,61 @@
+Here’s what that DevTools error means:
+
+🔎 Explanation of the Error
+Message:
+
+Code
+GET https://nihongolien.netlify.app/api/vocab 502 (Bad Gateway)
+What it means:  
+The browser tried to fetch data from the endpoint /api/vocab on your Netlify site. Instead of returning the expected response, the server (or proxy in front of it) returned a 502 Bad Gateway error.
+A 502 error indicates that the server acting as a gateway or proxy received an invalid response from the upstream server.
+
+⚠️ Common Causes
+Missing backend function:
+
+On Netlify, routes like /api/vocab usually point to serverless functions. If the function isn’t deployed, misnamed, or placed in the wrong folder (netlify/functions or netlify/functions/api/vocab.js), Netlify can’t find it and returns 502.
+
+Function runtime error:
+
+The function exists but crashes (syntax error, missing dependency, or unhandled exception). Netlify then reports 502.
+
+Incorrect configuration:
+
+If you’re using a netlify.toml file or rewrites/redirects, the path /api/vocab may not be correctly mapped to the function.
+
+Upstream service issue:
+
+If your function calls another API (e.g., a database or external service), and that service fails or times out, Netlify returns 502.
+
+🛠️ How to Fix
+Check function location:  
+Ensure your function file is in the correct folder. For example:
+
+Code
+netlify/functions/vocab.js
+and exported properly:
+
+js
+exports.handler = async (event, context) => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ message: "Hello vocab!" })
+  };
+};
+Verify netlify.toml:  
+Make sure you have the correct configuration:
+
+toml
+[functions]
+directory = "netlify/functions"
+Test locally:  
+Run netlify dev and check if /api/vocab works. If it fails locally, the issue is in your function code.
+
+Check logs:  
+In your Netlify dashboard (you already have the Deploy details tab open), look at the Functions logs. They’ll show if the function crashed or wasn’t found.
+
+Dependencies:  
+If your function uses external libraries, ensure they’re listed in package.json and installed before deployment.
+
+👉 In short: The error means Netlify couldn’t serve /api/vocab. Most likely, the serverless function for that route is missing, misconfigured, or failing at runtime. Double-check your function folder, configuration, and logs to fix it.
+
+Would you like me to walk you through setting up a minimal working Netlify function for /api/vocab so you can test if the route responds correctly?

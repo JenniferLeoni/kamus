@@ -13,6 +13,25 @@ export async function handler(
   event: HandlerEvent,
   context: HandlerContext,
 ): Promise<HandlerResponse> {
-  await connectMongo();
-  return serverlessApp(event, context) as Promise<HandlerResponse>;
+  try {
+    await connectMongo();
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return {
+      statusCode: 500,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: "Database connection failed", detail: message }),
+    };
+  }
+
+  try {
+    return (await serverlessApp(event, context)) as HandlerResponse;
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return {
+      statusCode: 500,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: "Internal server error", detail: message }),
+    };
+  }
 }
