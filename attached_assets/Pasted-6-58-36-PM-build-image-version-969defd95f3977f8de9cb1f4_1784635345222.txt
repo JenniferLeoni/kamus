@@ -1,0 +1,122 @@
+6:58:36 PM: build-image version: 969defd95f3977f8de9cb1f48802a7e6f3d8c0b3 (noble-new-builds)
+6:58:36 PM: buildbot version: b34371363d3ca30c2d1b8c0c23cb261247d6f156
+6:58:36 PM: Building with cache
+6:58:36 PM: Starting to prepare the repo for build
+6:58:36 PM: Preparing Git Reference refs/heads/main
+6:58:38 PM: Custom publish path detected. Proceeding with the specified path: 'artifacts/japanese-quiz/dist/public'
+6:58:38 PM: Custom functions path detected. Proceeding with the specified path: 'netlify/functions'
+6:58:38 PM: Installing dependencies
+6:58:38 PM: mise ~/.config/mise/config.toml tools: python@3.14.3
+6:58:38 PM: mise ~/.config/mise/config.toml tools: ruby@3.4.8
+6:58:39 PM: mise ~/.config/mise/config.toml tools: go@1.26.2
+6:58:39 PM: v24.18.0 is already installed.
+6:58:39 PM: Now using node v24.18.0 (npm v11.16.0)
+6:58:39 PM: Enabling Node.js Corepack
+6:58:40 PM: WARNING: The environment variable 'NODE_ENV' is set to 'production'. Any 'devDependencies' in package.json will not be installed
+6:58:40 PM: pnpm workspaces detected
+6:58:40 PM: Installing npm packages using pnpm version 10.30.3
+6:58:41 PM: Scope: all 9 workspace projects
+6:58:41 PM: Lockfile is up to date, resolution step is skipped
+6:58:41 PM: Already up to date
+6:58:43 PM: . preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+6:58:43 PM: . preinstall: Done
+6:58:43 PM: Done in 2.3s using pnpm v10.30.3
+6:58:43 PM: npm packages installed using pnpm
+6:58:43 PM: Successfully installed dependencies
+6:58:44 PM: Detected 0 framework(s)
+6:58:44 PM: Starting build script
+6:58:46 PM: Section completed: initializing
+6:58:48 PM: ​
+6:58:48 PM: Netlify Build                                                 
+6:58:48 PM: ────────────────────────────────────────────────────────────────
+6:58:48 PM: ​
+6:58:48 PM: ❯ Version
+6:58:48 PM:   @netlify/build 36.1.5
+6:58:48 PM: ​
+6:58:48 PM: ❯ Flags
+6:58:48 PM:   accountId: 68c851575d2d063c7e59a549
+6:58:48 PM:   baseRelDir: true
+6:58:48 PM:   buildId: 6a5f5eeb376f110008a0bf60
+6:58:48 PM:   deployId: 6a5f5eeb376f110008a0bf62
+6:58:48 PM:   packagePath: artifacts/japanese-quiz
+6:58:48 PM: ​
+6:58:48 PM: ❯ Current directory
+6:58:48 PM:   /opt/build/repo
+6:58:48 PM: ​
+6:58:48 PM: ❯ Config file
+6:58:48 PM:   /opt/build/repo/netlify.toml
+6:58:48 PM: ​
+6:58:48 PM: ❯ Context
+6:58:48 PM:   production
+6:58:48 PM: ​
+6:58:48 PM: build.command from netlify.toml                               
+6:58:48 PM: ────────────────────────────────────────────────────────────────
+6:58:48 PM: ​
+6:58:48 PM: $ pnpm --filter @workspace/japanese-quiz... run build
+6:58:49 PM: Scope: 2 of 9 workspace projects
+6:58:49 PM: artifacts/japanese-quiz build$ vite build --config vite.config.ts
+6:58:49 PM: artifacts/japanese-quiz build: vite v7.3.6 building client environment for production...
+6:58:49 PM: artifacts/japanese-quiz build: transforming...
+6:58:50 PM: artifacts/japanese-quiz build: src/components/ui/tooltip.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+6:58:50 PM: artifacts/japanese-quiz build: src/components/ui/label.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+6:58:50 PM: artifacts/japanese-quiz build: src/components/ui/select.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+6:58:52 PM: artifacts/japanese-quiz build: ✓ 1852 modules transformed.
+6:58:53 PM: artifacts/japanese-quiz build: rendering chunks...
+6:58:53 PM: artifacts/japanese-quiz build: computing gzip size...
+6:58:53 PM: artifacts/japanese-quiz build: dist/public/index.html                   1.39 kB │ gzip:   0.55 kB
+6:58:53 PM: artifacts/japanese-quiz build: dist/public/assets/index-QOnNEtPW.css  102.10 kB │ gzip:  16.94 kB
+6:58:53 PM: artifacts/japanese-quiz build: dist/public/assets/index-CWuWA2un.js   540.45 kB │ gzip: 162.03 kB
+6:58:53 PM: artifacts/japanese-quiz build: ✓ built in 3.50s
+6:58:53 PM: artifacts/japanese-quiz build: 
+6:58:53 PM: artifacts/japanese-quiz build: (!) Some chunks are larger than 500 kB after minification. Consider:
+6:58:53 PM: artifacts/japanese-quiz build: - Using dynamic import() to code-split the application
+6:58:53 PM: artifacts/japanese-quiz build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+6:58:53 PM: artifacts/japanese-quiz build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+6:58:53 PM: artifacts/japanese-quiz build: Done
+6:58:53 PM: ​
+6:58:53 PM: (build.command completed in 4.4s)
+6:58:53 PM: ​
+6:58:53 PM: Functions bundling                                            
+6:58:53 PM: ────────────────────────────────────────────────────────────────
+6:58:53 PM: ​
+6:58:53 PM: Packaging Functions from netlify/functions directory:
+6:58:53 PM:  - api.ts
+6:58:53 PM: ​
+6:58:53 PM: ​
+6:58:53 PM: (Functions bundling completed in 631ms)
+6:58:56 PM: ​
+6:58:56 PM: Scanning for secrets in code and build output.                
+6:58:56 PM: ────────────────────────────────────────────────────────────────
+6:58:56 PM: ​
+6:58:56 PM: Secrets scanning complete. 242 file(s) scanned. No secrets detected in build output or repo code!
+6:58:56 PM: ​
+6:58:56 PM: (Secrets scanning completed in 2.4s)
+6:58:56 PM: ​
+6:58:56 PM: Deploy site                                                   
+6:58:56 PM: ────────────────────────────────────────────────────────────────
+6:58:56 PM: ​
+6:58:56 PM: Starting to deploy site from 'artifacts/japanese-quiz/dist/public'
+6:58:56 PM: Calculating files to upload
+6:58:56 PM: 0 new file(s) to upload
+6:58:56 PM: 1 new function(s) to upload
+6:59:02 PM: Starting post processing
+6:59:02 PM: Skipping form detection
+6:59:02 PM: Post processing - header rules
+6:59:02 PM: Post processing - redirect rules
+6:59:02 PM: Post processing done
+6:59:02 PM: Section completed: postprocessing
+6:59:02 PM: Section completed: deploying
+6:59:02 PM: Site deploy was successfully initiated
+6:59:02 PM: ​
+6:59:02 PM: (Deploy site completed in 6.6s)
+6:59:02 PM: ​
+6:59:02 PM: Netlify Build Complete                                        
+6:59:02 PM: ────────────────────────────────────────────────────────────────
+6:59:02 PM: ​
+6:59:02 PM: (Netlify Build completed in 14.4s)
+6:59:03 PM: Site is live ✨
+6:59:04 PM: Caching artifacts
+6:59:04 PM: Section completed: building
+6:59:10 PM: Uploading cache of size 276.6MB
+6:59:11 PM: Section completed: cleanup
+6:59:11 PM: Finished processing build request in 34.648s

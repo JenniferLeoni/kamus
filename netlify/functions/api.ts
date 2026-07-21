@@ -1,37 +1,29 @@
 import type { HandlerEvent, HandlerContext, HandlerResponse } from "@netlify/functions";
-import serverless from "serverless-http";
-import app from "../../artifacts/api-server/src/app";
-import { connectMongo } from "../../artifacts/api-server/src/lib/mongodb";
 
-// Wrap the existing Express app as a Netlify serverless function.
-// connectMongo() is guarded by an isConnected flag, so it is a no-op on
-// warm invocations — this keeps the MongoDB connection alive across requests
-// and avoids exhausting Atlas free-tier connection limits.
-const serverlessApp = serverless(app);
-
+// All imports are lazy so any module-initialization crash is caught
+// by the try/catch below and returned as a readable 500 instead of a
+// silent 502.
 export async function handler(
   event: HandlerEvent,
   context: HandlerContext,
 ): Promise<HandlerResponse> {
   try {
-    await connectMongo();
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    return {
-      statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ error: "Database connection failed", detail: message }),
-    };
-  }
+    const [{ default: serverless }, { default: app }, { connectMongo }] =
+      await Promise.all([
+        import("serverless-http"),
+        import("../../artifacts/api-server/src/app-serverless"),
+        import("../../artifacts/api-server/src/lib/mongodb"),
+      ]);
 
-  try {
-    return (await serverlessApp(event, context)) as HandlerResponse;
+    await connectMongo();
+    return (await serverless(app)(event, context)) as HandlerResponse;
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
+    const stack = err instanceof Error ? err.stack : undefined;
     return {
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ error: "Internal server error", detail: message }),
+      body: JSON.stringify({ error: "Server error", detail: message, stack }),
     };
   }
 }
