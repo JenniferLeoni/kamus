@@ -17,15 +17,22 @@ if (Number.isNaN(port) || port <= 0) {
 }
 
 async function main() {
-  await connectMongo();
-
-  app.listen(port, (err) => {
-    if (err) {
-      logger.error({ err }, "Error listening on port");
-      process.exit(1);
-    }
-    logger.info({ port }, "Server listening");
+  // Start listening first so startup health checks pass immediately,
+  // then connect to MongoDB. Requests that hit DB-backed routes before
+  // the connection is ready will fail gracefully via Mongoose's own errors.
+  await new Promise<void>((resolve, reject) => {
+    app.listen(port, (err) => {
+      if (err) {
+        logger.error({ err }, "Error listening on port");
+        reject(err);
+        return;
+      }
+      logger.info({ port }, "Server listening");
+      resolve();
+    });
   });
+
+  await connectMongo();
 }
 
 main().catch((err) => {
