@@ -245,21 +245,26 @@ export default function MultipleChoicePractice() {
                   
                   {question.questionType === "vocab" && question.vocab?.example_sentences && question.vocab.example_sentences.length > 0 && (
                     <div className="bg-muted/30 p-4 rounded-lg space-y-3">
-                      <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Example</p>
-                      <div>
-                        <p className="font-serif text-lg">{question.vocab.example_sentences[0].japanese}</p>
-                        <p className="text-muted-foreground text-sm mt-1">{question.vocab.example_sentences[0].english}</p>
-                      </div>
+                      <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Examples</p>
+                      {question.vocab.example_sentences.map((ex, i) => (
+                        <div key={i} className={i > 0 ? "pt-3 border-t border-border/40" : ""}>
+                          <p className="font-serif text-lg">{ex.japanese}</p>
+                          {ex.romaji && <p className="text-muted-foreground text-sm mt-0.5 italic">{ex.romaji}</p>}
+                          <p className="text-muted-foreground text-sm mt-1">{ex.english}</p>
+                        </div>
+                      ))}
                     </div>
                   )}
 
                   {question.questionType === "kanji" && question.kanji?.examples && question.kanji.examples.length > 0 && (
                     <div className="bg-muted/30 p-4 rounded-lg space-y-3">
-                      <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Example Word</p>
-                      <div>
-                        <p className="font-serif text-lg">{question.kanji.examples[0].word} <span className="text-sm text-muted-foreground ml-2">({question.kanji.examples[0].reading})</span></p>
-                        <p className="text-muted-foreground text-sm mt-1">{question.kanji.examples[0].meaning}</p>
-                      </div>
+                      <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Example Words</p>
+                      {question.kanji.examples.map((ex, i) => (
+                        <div key={i} className={i > 0 ? "pt-3 border-t border-border/40" : ""}>
+                          <p className="font-serif text-lg">{ex.word} <span className="text-sm text-muted-foreground ml-2">({ex.reading})</span></p>
+                          <p className="text-muted-foreground text-sm mt-1">{ex.meaning}</p>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
