@@ -194,7 +194,7 @@ export default function MultipleChoicePractice() {
       </header>
 
       <Card className="bg-card shadow-sm border-border overflow-hidden">
-        <div className="p-16 flex flex-col items-center justify-center min-h-[300px] border-b border-border bg-muted/20 relative">
+        <div className="p-8 md:p-16 flex flex-col items-center justify-center min-h-[220px] md:min-h-[300px] border-b border-border bg-muted/20 relative">
           <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.02] mix-blend-multiply pointer-events-none"></div>
           {question.promptReading && (
             <div className="text-muted-foreground text-xl mb-4 font-serif tracking-widest">{question.promptReading}</div>
@@ -204,7 +204,7 @@ export default function MultipleChoicePractice() {
           </h2>
         </div>
         
-        <CardContent className="p-8">
+        <CardContent className="p-4 md:p-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {question.options.map((option, idx) => {
               const isSelected = selectedOption === idx;
@@ -237,7 +237,7 @@ export default function MultipleChoicePractice() {
 
           {isAnswered && (
             <div className="mt-8 pt-8 border-t border-border animate-in slide-in-from-top-4 duration-300">
-              <div className="flex justify-between items-start gap-4">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                 <div className="space-y-4 flex-1">
                   <h3 className="text-xl font-bold text-foreground">
                     {question.questionType === "vocab" ? question.vocab?.meaning : question.kanji?.meanings.join(", ")}
@@ -269,7 +269,7 @@ export default function MultipleChoicePractice() {
                   )}
                 </div>
 
-                <Button onClick={handleNext} size="lg" className="flex-shrink-0 group">
+                <Button onClick={handleNext} size="lg" className="flex-shrink-0 w-full sm:w-auto group">
                   {currentQuestionIdx < questions.length - 1 ? "Next Question" : "View Results"} 
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>

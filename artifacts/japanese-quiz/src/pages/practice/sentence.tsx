@@ -201,7 +201,7 @@ export default function SentencePractice() {
       </header>
 
       <Card className="bg-card shadow-sm border-border overflow-hidden">
-        <div className="p-12 text-center border-b border-border bg-muted/10 relative">
+        <div className="p-6 md:p-12 text-center border-b border-border bg-muted/10 relative">
           <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-4">Target Word</p>
           <div className="flex flex-col items-center gap-2">
             <span className="text-muted-foreground font-serif tracking-widest">{word.reading}</span>
@@ -210,7 +210,7 @@ export default function SentencePractice() {
           </div>
         </div>
 
-        <CardContent className="p-8 space-y-6">
+        <CardContent className="p-4 md:p-8 space-y-6">
           {!feedback ? (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
@@ -250,15 +250,17 @@ export default function SentencePractice() {
                 )}
                 
                 <div>
-                  <h3 className={cn(
-                    "text-xl font-bold flex items-center gap-2",
-                    feedback.isCorrect ? "text-green-700 dark:text-green-400" : "text-destructive"
-                  )}>
-                    {feedback.isCorrect ? "Excellent!" : "Needs adjustment"} 
-                    <span className="ml-auto text-sm font-mono bg-background px-3 py-1 rounded-full border">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <h3 className={cn(
+                      "text-xl font-bold",
+                      feedback.isCorrect ? "text-green-700 dark:text-green-400" : "text-destructive"
+                    )}>
+                      {feedback.isCorrect ? "Excellent!" : "Needs adjustment"}
+                    </h3>
+                    <span className="text-sm font-mono bg-background px-3 py-1 rounded-full border flex-shrink-0">
                       Score: {feedback.score}/100
                     </span>
-                  </h3>
+                  </div>
                   <p className="mt-3 text-foreground leading-relaxed">{feedback.feedback}</p>
                 </div>
 

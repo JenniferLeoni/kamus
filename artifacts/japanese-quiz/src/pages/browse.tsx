@@ -256,7 +256,7 @@ export default function Browse() {
         </TabsList>
 
         <TabsContent value="vocab" className="mt-6">
-          <div className="border border-border rounded-lg bg-card overflow-hidden">
+          <div className="border border-border rounded-lg bg-card overflow-hidden overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50">
@@ -306,7 +306,7 @@ export default function Browse() {
                       <TableCell><Badge variant="outline" className="font-mono">{vocab.level}</Badge></TableCell>
                       <TableCell className="text-sm text-muted-foreground">{vocab.section}.{vocab.chapter}</TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex justify-end gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                           <Link href={`/edit/vocab/${vocab.id}`} onClick={(e) => e.stopPropagation()}>
                             <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
                               <Edit className="h-4 w-4" />
@@ -326,7 +326,7 @@ export default function Browse() {
         </TabsContent>
 
         <TabsContent value="kanji" className="mt-6">
-          <div className="border border-border rounded-lg bg-card overflow-hidden">
+          <div className="border border-border rounded-lg bg-card overflow-hidden overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50">
@@ -379,7 +379,7 @@ export default function Browse() {
                       </TableCell>
                       <TableCell><Badge variant="outline" className="font-mono">{kanji.level}</Badge></TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex justify-end gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                           <Link href={`/edit/kanji/${kanji.id}`} onClick={(e) => e.stopPropagation()}>
                             <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
                               <Edit className="h-4 w-4" />
