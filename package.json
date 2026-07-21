@@ -10,7 +10,9 @@
   },
   "private": true,
   "dependencies": {
-    "@replit/connectors-sdk": "^0.4.1"
+    "@netlify/functions": "^5.3.0",
+    "@replit/connectors-sdk": "^0.4.1",
+    "serverless-http": "^4.0.0"
   },
   "devDependencies": {
     "prettier": "^3.9.5",
