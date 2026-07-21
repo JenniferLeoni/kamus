@@ -74,7 +74,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Main Content */}
       <main className="flex-1 h-full overflow-y-auto relative bg-[#FDFBF7] dark:bg-[#151413]">
-        <div className="absolute inset-0 pointer-events-none opacity-[0.04] dark:opacity-[0.02] mix-blend-multiply dark:mix-blend-screen bg-[url('https://grainy-gradients.vercel.app/noise.svg')] z-0"></div>
+        <div className="absolute inset-0 pointer-events-none opacity-[0.04] dark:opacity-[0.02] mix-blend-multiply dark:mix-blend-screen bg-[url('/noise.svg')] z-0"></div>
         <div className="relative z-10 p-8 max-w-6xl mx-auto min-h-full">
           {children}
         </div>

@@ -195,7 +195,7 @@ export default function MultipleChoicePractice() {
 
       <Card className="bg-card shadow-sm border-border overflow-hidden">
         <div className="p-16 flex flex-col items-center justify-center min-h-[300px] border-b border-border bg-muted/20 relative">
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] mix-blend-multiply pointer-events-none"></div>
+          <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.02] mix-blend-multiply pointer-events-none"></div>
           {question.promptReading && (
             <div className="text-muted-foreground text-xl mb-4 font-serif tracking-widest">{question.promptReading}</div>
           )}
