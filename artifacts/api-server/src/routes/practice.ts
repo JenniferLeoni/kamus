@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Vocab } from "../models/vocab";
 import { Kanji } from "../models/kanji";
 import {
@@ -8,6 +7,7 @@ import {
   GetSentenceWordsQueryParams,
 } from "@workspace/api-zod";
 import { logger } from "../lib/logger";
+import { checkSentenceWithFallback } from "../lib/ai-fallback";
 
 const router = Router();
 
@@ -122,66 +122,12 @@ router.post("/sentence-check", async (req, res) => {
   }
   const { word, reading, meaning, sentence } = parsed.data;
 
-  const apiKey = process.env["GEMINI_API_KEY"];
-  if (!apiKey) {
-    res.status(500).json({ error: "GEMINI_API_KEY not configured" });
-    return;
-  }
-
   try {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-    const prompt = `You are a Japanese language teacher evaluating a student's sentence.
-
-Word given: ${word} (${reading}) — meaning: ${meaning}
-Student's sentence: ${sentence}
-
-Evaluate the sentence. Respond ONLY with a JSON object (no markdown, no code blocks) with this exact structure:
-{
-  "isCorrect": boolean,
-  "score": number (0-100),
-  "feedback": "concise feedback in English",
-  "corrections": "corrected sentence if needed, or null if perfect",
-  "alternativeExamples": [
-    { "japanese": "...", "romaji": "...", "english": "..." },
-    { "japanese": "...", "romaji": "...", "english": "..." },
-    { "japanese": "...", "romaji": "...", "english": "..." }
-  ]
-}
-
-Rules:
-- alternativeExamples must use different grammar patterns (e.g. -tai, -nai, -te kudasai, -koto ga dekiru, -nagara, etc.)
-- Be encouraging but accurate
-- Score 0-100: 90+ for perfect, 70-89 for minor errors, 50-69 for understandable but wrong, below 50 for major issues`;
-
-    const result = await model.generateContent(prompt);
-    const text = result.response.text().trim();
-
-    let parsed_result: {
-      isCorrect: boolean;
-      score: number;
-      feedback: string;
-      corrections: string | null;
-      alternativeExamples: Array<{ japanese: string; romaji: string; english: string }>;
-    };
-    try {
-      parsed_result = JSON.parse(text);
-    } catch {
-      // Try to extract JSON if model wrapped it
-      const match = text.match(/\{[\s\S]*\}/);
-      if (!match) throw new Error("Could not parse AI response");
-      parsed_result = JSON.parse(match[0]);
-    }
-
-    res.json(parsed_result);
+    const { result, provider } = await checkSentenceWithFallback(word, reading, meaning, sentence);
+    res.json({ ...result, _provider: provider });
   } catch (err: any) {
-    logger.error({ err }, "Gemini API error");
-    if (err?.status === 429) {
-      res.status(429).json({ error: "Gemini API quota exceeded. Please check your API key's billing/quota at ai.google.dev and try again shortly." });
-    } else {
-      res.status(500).json({ error: "AI check failed. Please try again." });
-    }
+    logger.error({ err }, "All AI providers failed");
+    res.status(503).json({ error: "All AI providers are currently unavailable. Please try again later." });
   }
 });
 
