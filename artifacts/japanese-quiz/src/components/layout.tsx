@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { BookOpen, Database, PlusCircle, LayoutDashboard, BrainCircuit, PenTool, Menu } from "lucide-react";
+import { BookOpen, Database, PlusCircle, LayoutDashboard, BrainCircuit, PenTool, Zap, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ const navItems = [
   { name: "Add Entry", href: "/add", icon: PlusCircle },
   { name: "Multiple Choice", href: "/practice/multiple-choice", icon: BrainCircuit },
   { name: "Sentence Output", href: "/practice/sentence", icon: PenTool },
+  { name: "Speed Memo", href: "/practice/speed-memo", icon: Zap },
 ];
 
 function NavContent({ location, onNavigate }: { location: string; onNavigate?: () => void }) {
