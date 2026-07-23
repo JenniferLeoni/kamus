@@ -124,10 +124,10 @@ export default function MultipleChoicePractice() {
                   <Select name="count" defaultValue="10">
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="5">5 questions</SelectItem>
                       <SelectItem value="10">10 questions</SelectItem>
-                      <SelectItem value="20">20 questions</SelectItem>
+                      <SelectItem value="30">30 questions</SelectItem>
                       <SelectItem value="50">50 questions</SelectItem>
+                      <SelectItem value="9999">All questions</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
