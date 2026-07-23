@@ -17,18 +17,23 @@ const queryClient = new QueryClient();
 
 function Router() {
   return (
-    <Layout>
-      <Switch>
-        <Route path="/" component={Dashboard} />
-        <Route path="/browse" component={Browse} />
-        <Route path="/add" component={AddEntry} />
-        <Route path="/edit/:type/:id" component={EditEntry} />
-        <Route path="/practice/multiple-choice" component={MultipleChoicePractice} />
-        <Route path="/practice/sentence" component={SentencePractice} />
-        <Route path="/practice/speed-memo" component={SpeedMemo} />
-        <Route component={NotFound} />
-      </Switch>
-    </Layout>
+    <Switch>
+      {/* Speed Memo runs full-screen with no nav/header */}
+      <Route path="/practice/speed-memo" component={SpeedMemo} />
+      <Route>
+        <Layout>
+          <Switch>
+            <Route path="/" component={Dashboard} />
+            <Route path="/browse" component={Browse} />
+            <Route path="/add" component={AddEntry} />
+            <Route path="/edit/:type/:id" component={EditEntry} />
+            <Route path="/practice/multiple-choice" component={MultipleChoicePractice} />
+            <Route path="/practice/sentence" component={SentencePractice} />
+            <Route component={NotFound} />
+          </Switch>
+        </Layout>
+      </Route>
+    </Switch>
   );
 }
 
