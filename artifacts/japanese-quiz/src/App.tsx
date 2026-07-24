@@ -11,6 +11,7 @@ import EditEntry from '@/pages/edit-entry';
 import MultipleChoicePractice from '@/pages/practice/multiple-choice';
 import SentencePractice from '@/pages/practice/sentence';
 import SpeedMemo from '@/pages/practice/speed-memo';
+import BulkAddEntry from '@/pages/add-bulk';
 import NotFound from '@/pages/not-found';
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ function Router() {
         <Route path="/practice/multiple-choice" component={MultipleChoicePractice} />
         <Route path="/practice/sentence" component={SentencePractice} />
         <Route path="/practice/speed-memo" component={SpeedMemo} />
+        <Route path="/add-bulk" component={BulkAddEntry} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
