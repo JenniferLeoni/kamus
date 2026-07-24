@@ -28,7 +28,7 @@ export interface IVocab extends Document {
 
 const ExampleSentenceSchema = new Schema<IExampleSentence>({
   japanese: { type: String, required: true },
-  romaji: { type: String, required: true },
+  romaji: { type: String, default: "" },
   english: { type: String, required: true },
 });
 

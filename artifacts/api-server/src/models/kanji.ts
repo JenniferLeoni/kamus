@@ -20,7 +20,7 @@ export interface IKanji extends Document {
 
 const KanjiExampleSchema = new Schema<IKanjiExample>({
   word: { type: String, required: true },
-  reading: { type: String, required: true },
+  reading: { type: String, default: "" },
   meaning: { type: String, required: true },
 });
 
