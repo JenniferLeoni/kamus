@@ -170,6 +170,8 @@ export default function Browse() {
   const [activeTab, setActiveTab] = useState("vocab");
   const [search, setSearch] = useState("");
   const [level, setLevel] = useState<string>("all");
+  const [section, setSection] = useState<string>("");
+  const [chapter, setChapter] = useState<string>("");
   const [selectedVocab, setSelectedVocab] = useState<VocabItem | null>(null);
   const [selectedKanji, setSelectedKanji] = useState<KanjiItem | null>(null);
 
@@ -177,15 +179,20 @@ export default function Browse() {
   const { toast } = useToast();
 
   const levelFilter = level !== "all" ? level as any : undefined;
+  const sectionFilter = section !== "" ? Number(section) : undefined;
+  const chapterFilter = chapter !== "" ? Number(chapter) : undefined;
+
+  const vocabParams = { search: search || undefined, level: levelFilter, section: sectionFilter, chapter: chapterFilter };
+  const kanjiParams = { search: search || undefined, level: levelFilter, section: sectionFilter, chapter: chapterFilter };
 
   const { data: vocabList, isLoading: vocabLoading } = useListVocab(
-    { search: search || undefined, level: levelFilter },
-    { query: { queryKey: getListVocabQueryKey({ search: search || undefined, level: levelFilter }) } }
+    vocabParams,
+    { query: { queryKey: getListVocabQueryKey(vocabParams) } }
   );
 
   const { data: kanjiList, isLoading: kanjiLoading } = useListKanji(
-    { search: search || undefined, level: levelFilter },
-    { query: { queryKey: getListKanjiQueryKey({ search: search || undefined, level: levelFilter }) } }
+    kanjiParams,
+    { query: { queryKey: getListKanjiQueryKey(kanjiParams) } }
   );
 
   const deleteVocab = useDeleteVocab();
@@ -224,29 +231,57 @@ export default function Browse() {
         <p className="text-muted-foreground">Manage your vocabulary and kanji collection.</p>
       </header>
 
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search words, meanings, or readings..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-card"
-          />
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search words, meanings, or readings..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9 bg-card"
+            />
+          </div>
+          <Select value={level} onValueChange={setLevel}>
+            <SelectTrigger className="w-full sm:w-[160px] bg-card">
+              <SelectValue placeholder="Filter by Level" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Levels</SelectItem>
+              <SelectItem value="N5">N5</SelectItem>
+              <SelectItem value="N4">N4</SelectItem>
+              <SelectItem value="N3">N3</SelectItem>
+              <SelectItem value="N2">N2</SelectItem>
+              <SelectItem value="N1">N1</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <Select value={level} onValueChange={setLevel}>
-          <SelectTrigger className="w-[180px] bg-card">
-            <SelectValue placeholder="Filter by Level" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Levels</SelectItem>
-            <SelectItem value="N5">N5</SelectItem>
-            <SelectItem value="N4">N4</SelectItem>
-            <SelectItem value="N3">N3</SelectItem>
-            <SelectItem value="N2">N2</SelectItem>
-            <SelectItem value="N1">N1</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Input
+            type="number"
+            min={1}
+            placeholder="Section (optional)"
+            value={section}
+            onChange={(e) => setSection(e.target.value)}
+            className="bg-card sm:w-[160px]"
+          />
+          <Input
+            type="number"
+            min={1}
+            placeholder="Chapter (optional)"
+            value={chapter}
+            onChange={(e) => setChapter(e.target.value)}
+            className="bg-card sm:w-[160px]"
+          />
+          {(section || chapter) && (
+            <button
+              onClick={() => { setSection(""); setChapter(""); }}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors self-center"
+            >
+              Clear filters
+            </button>
+          )}
+        </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -256,7 +291,7 @@ export default function Browse() {
         </TabsList>
 
         <TabsContent value="vocab" className="mt-6">
-          <div className="border border-border rounded-lg bg-card overflow-hidden">
+          <div className="border border-border rounded-lg bg-card overflow-hidden overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50">
@@ -306,7 +341,7 @@ export default function Browse() {
                       <TableCell><Badge variant="outline" className="font-mono">{vocab.level}</Badge></TableCell>
                       <TableCell className="text-sm text-muted-foreground">{vocab.section}.{vocab.chapter}</TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex justify-end gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                           <Link href={`/edit/vocab/${vocab.id}`} onClick={(e) => e.stopPropagation()}>
                             <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
                               <Edit className="h-4 w-4" />
@@ -326,7 +361,7 @@ export default function Browse() {
         </TabsContent>
 
         <TabsContent value="kanji" className="mt-6">
-          <div className="border border-border rounded-lg bg-card overflow-hidden">
+          <div className="border border-border rounded-lg bg-card overflow-hidden overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50">
@@ -379,7 +414,7 @@ export default function Browse() {
                       </TableCell>
                       <TableCell><Badge variant="outline" className="font-mono">{kanji.level}</Badge></TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex justify-end gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                           <Link href={`/edit/kanji/${kanji.id}`} onClick={(e) => e.stopPropagation()}>
                             <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
                               <Edit className="h-4 w-4" />

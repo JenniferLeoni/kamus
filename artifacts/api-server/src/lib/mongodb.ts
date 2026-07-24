@@ -1,20 +1,19 @@
 import mongoose from "mongoose";
 import { logger } from "./logger";
 
-if (!process.env["MONGODB_URI"]) {
-  throw new Error("MONGODB_URI environment variable is required.");
-}
-
-const MONGODB_URI = process.env["MONGODB_URI"];
-
 let isConnected = false;
 
 export async function connectMongo(): Promise<void> {
   if (isConnected) return;
 
+  const MONGODB_URI = process.env["MONGODB_URI"];
+  if (!MONGODB_URI) {
+    throw new Error("MONGODB_URI environment variable is required.");
+  }
+
   try {
     await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 10000,
+      serverSelectionTimeoutMS: 5000,
     });
     isConnected = true;
     logger.info("Connected to MongoDB");

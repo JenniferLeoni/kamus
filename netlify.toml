@@ -1,17 +1,25 @@
 [build]
   command   = "pnpm --filter @workspace/japanese-quiz... run build"
   publish   = "artifacts/japanese-quiz/dist/public"
+  functions = "netlify/functions"
 
 [build.environment]
   # Vite base path for a Netlify root deployment
-  BASE_PATH = "/"
-  # Required: set this in Netlify → Site settings → Environment variables
-  # to the full URL of your deployed API server, e.g.:
-  #   VITE_API_BASE_URL = "https://your-api.replit.app/api"
-  # VITE_API_BASE_URL is intentionally left unset here so it can be
-  # configured per-site without being committed to the repo.
+  BASE_PATH   = "/"
+  # Run functions in production mode so pino uses JSON output (not pino-pretty)
+  NODE_ENV    = "production"
 
-# SPA fallback — all routes serve index.html
+[functions]
+  node_bundler = "esbuild"
+
+# API routes → serverless function (must come before the SPA fallback)
+[[redirects]]
+  from   = "/api/*"
+  to     = "/.netlify/functions/api"
+  status = 200
+  force  = true
+
+# SPA fallback — all other routes serve index.html
 [[redirects]]
   from   = "/*"
   to     = "/index.html"

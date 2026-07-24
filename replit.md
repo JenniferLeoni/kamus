@@ -9,7 +9,29 @@ A Japanese vocabulary and kanji study app with AI-powered practice modes.
 - **Database**: MongoDB (via Mongoose)
 - **AI**: Gemini / Groq / OpenRouter APIs for sentence feedback
 
-## Running the app
+## Deployment (Netlify)
+
+The app is deployed entirely on Netlify — no separate API server needed.
+
+- The React frontend is built by Vite and served as static files.
+- The Express API server runs as a **Netlify serverless function** (`netlify/functions/api.ts`),
+  which wraps the existing `app.ts` via `serverless-http`.
+- `/api/*` requests are redirected to the function automatically (`netlify.toml`).
+
+### Required environment variables in Netlify
+
+| Variable | Description |
+|---|---|
+| `MONGODB_URI` | MongoDB Atlas connection string |
+| `GEMINI_API_KEY` | Google Gemini API key (AI sentence feedback) |
+| `GROQ_API_KEY` | Groq API key (AI fallback) |
+| `OPENROUTER_API_KEY` | OpenRouter API key (AI fallback) |
+| `VITE_APP_PASSWORD` | Optional password gate for the frontend |
+
+> **MongoDB Atlas**: make sure `0.0.0.0/0` is in your Atlas Network Access list so
+> the serverless function (dynamic IPs) can connect.
+
+## Running locally on Replit
 
 Two workflows run in parallel:
 
@@ -22,15 +44,6 @@ Install dependencies first (if missing):
 ```bash
 pnpm install
 ```
-
-## Required secrets
-
-| Secret | Description |
-|---|---|
-| `MONGODB_URI` | MongoDB connection string |
-| `GEMINI_API_KEY` | Google Gemini API key (AI sentence feedback) |
-| `GROQ_API_KEY` | Groq API key (AI fallback) |
-| `OPENROUTER_API_KEY` | OpenRouter API key (AI fallback) |
 
 ## Project structure
 

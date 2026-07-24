@@ -103,8 +103,10 @@ async function buildAll() {
     ],
     sourcemap: "linked",
     plugins: [
-      // pino relies on workers to handle logging, instead of externalizing it we use a plugin to handle it
-      esbuildPluginPino({ transports: ["pino-pretty"] })
+      // pino relies on workers to handle logging. We do NOT include pino-pretty here because
+      // it uses worker threads that fail in serverless environments (e.g. Netlify Functions).
+      // The logger already guards pino-pretty behind NODE_ENV !== "production".
+      esbuildPluginPino({ transports: [] })
     ],
     // Make sure packages that are cjs only (e.g. express) but are bundled continue to work in our esm output file
     banner: {
